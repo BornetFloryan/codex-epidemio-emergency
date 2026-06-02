@@ -6,40 +6,47 @@ Ce dépôt contient une adaptation Codex du projet de skills demandé dans le co
 
 Le thème choisi est la veille épidémiologique en situation d’urgence.
 
-## Objectif opérationnel
+## Objectif
 
-Aider un agent à répondre rapidement à des questions comme :
+Fournir un ensemble cohérent de skills permettant à Codex d’aider à la décision en situation tendue, notamment pour :
 
-- Quelle est la situation épidémiologique actuelle ?
-- Quels signaux sanitaires faut-il surveiller ?
-- Quelle est la tendance grippe ou gastro-entérite ?
-- Peut-on produire une courte note de situation pour une cellule de crise ?
+- rechercher des sources de données sanitaires ;
+- analyser des indicateurs épidémiologiques ;
+- qualifier une tendance ;
+- produire une courte note de situation.
 
 ## Architecture
 
-- `.codex/skills/` contient les skills Codex, conformément au support de cours.
-- Chaque skill possède un `SKILL.md`.
-- Chaque script Python est testable seul en terminal.
-- Les fichiers `references/` contiennent les détails longs : sources, limites, formats et exemples.
-- Le projet repose sur des skills et des scripts CLI Python.
-- Le projet ne repose pas sur un serveur MCP.
+- `.codex/skills/` contient les skills Codex conformément au support de cours.
+- Chaque skill contient un `SKILL.md`.
+- Chaque skill peut appeler un script Python `main.py`.
+- Les scripts Python sont testables seuls en terminal.
+- Les fichiers `references/` contiennent les détails longs pour éviter de surcharger les `SKILL.md`.
+- `src/epidemio_common/` contient le code commun pour l’API et le cache SQLite.
+- `data/epidemio_cache.sqlite` est créé automatiquement pour stocker les résultats des appels API.
+- Le projet ne doit pas utiliser de serveur MCP.
 
-## Contraintes
+## Règles de développement
 
+- Ne pas créer d’application web.
+- Ne pas créer de serveur MCP.
 - Ne pas fournir de diagnostic médical individuel.
-- Toujours indiquer les limites des données.
-- Toujours mentionner la source utilisée.
-- Produire une réponse courte, claire et utile en situation tendue.
-- Garder les `SKILL.md` courts.
-- Mettre les détails longs dans `references/`.
-- Tester les scripts Python seuls avant de les utiliser avec Codex.
+- Toujours préciser les limites des données.
+- Toujours mentionner les sources utilisées.
+- Les scripts doivent retourner du JSON propre.
+- Les erreurs réseau doivent être gérées sans stacktrace brute.
+- Les tests ne doivent pas dépendre d’internet.
 
 ## Commandes utiles
 
 ```bash
+python -m pytest
+
+python .codex/skills/health-dataset-search/main.py "grippe santé publique"
 python .codex/skills/ias-indicators/main.py --indicator grippe
-python .codex/skills/public-health-search/main.py "grippe santé publique"
+python .codex/skills/ias-indicators/main.py --indicator gastro
 python .codex/skills/trend-analysis/main.py --sample
 python .codex/skills/crisis-report/main.py "Hausse des syndromes grippaux en France"
-python -m pytest
+python .codex/skills/geo-zone-context/main.py "Besançon"
+python .codex/skills/weather-alert-context/main.py "Besançon"
 ```

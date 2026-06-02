@@ -1,58 +1,41 @@
-# AGENTS.md
+---
+name: ias-indicators
+description: Trigger when user asks about IAS, indicateur avance sanitaire, syndrome grippal, flu, gastroenteritis, gastro-enterite, epidemic indicators, incidence, veille epidemiologique, data.gouv.fr, or sanitary monitoring in France.
+allowed-tools: Bash(python *), Read
+---
 
-## Nature du projet
+# IAS Indicators
 
-Ce dépôt contient une adaptation Codex du projet de skills demandé dans le cours.
+Use this skill to search public datasets related to French advanced health indicators.
 
-Le thème choisi est la veille épidémiologique en situation d’urgence.
+## Command
 
-## Objectif opérationnel
-
-Aider un agent à répondre rapidement à des questions comme :
-
-- Quelle est la situation épidémiologique actuelle ?
-- Quels signaux sanitaires faut-il surveiller ?
-- Quelle est la tendance grippe ou gastro-entérite ?
-- Peut-on produire une courte note de situation pour une cellule de crise ?
-
-## Architecture
-
-- `.codex/skills/` contient les skills Codex, conformément au support de cours.
-- Chaque skill possède un `SKILL.md`.
-- Chaque script Python est testable seul en terminal.
-- Les fichiers `references/` contiennent les détails longs : sources, limites, formats et exemples.
-- Le projet repose sur des skills et des scripts CLI Python.
-- Le projet ne repose pas sur un serveur MCP.
-
-## Contraintes
-
-- Ne pas fournir de diagnostic médical individuel.
-- Toujours indiquer les limites des données.
-- Toujours mentionner la source utilisée.
-- Produire une réponse courte, claire et utile en situation tendue.
-- Garder les `SKILL.md` courts.
-- Mettre les détails longs dans `references/`.
-- Tester les scripts Python seuls avant de les utiliser avec Codex.
-
-## Commandes utiles
+For flu:
 
 ```bash
 python .codex/skills/ias-indicators/main.py --indicator grippe
-python .codex/skills/public-health-search/main.py "grippe santé publique"
-python .codex/skills/trend-analysis/main.py --sample
-python .codex/skills/crisis-report/main.py "Hausse des syndromes grippaux en France"
-python -m pytest
+```
+
+For gastroenteritis:
+
+```bash
+python .codex/skills/ias-indicators/main.py --indicator gastro
 ```
 
 ## Expected output
 
-Return:
+Read the JSON output and summarize:
 
-- trend;
-- last value;
-- previous value;
-- delta;
+- indicator;
+- query;
+- dataset title;
+- dataset page;
+- organization;
+- resources;
 - interpretation;
+- cache status;
 - limits.
 
-Do not overinterpret the result.
+Do not provide individual medical diagnosis.
+
+For source details, see `references/sources.md`.

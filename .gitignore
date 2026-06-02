@@ -1,6 +1,4 @@
-# =========================================
 # Python
-# =========================================
 __pycache__/
 *.py[cod]
 *$py.class
@@ -11,48 +9,43 @@ venv/
 env/
 ENV/
 
-# Pytest
+# Tests / coverage
 .pytest_cache/
 .coverage
 htmlcov/
 
-# Distribution / packaging
+# Packaging
 build/
 dist/
 *.egg-info/
 
-# Logs
-*.log
-
-# =========================================
-# VS Code / IDE
-# =========================================
+# IDE
 .vscode/
 .idea/
 
-# =========================================
-# OS files
-# =========================================
+# OS
 .DS_Store
 Thumbs.db
 
-# =========================================
-# Codex / local sessions
-# =========================================
-.codex/sessions/
-.codex/logs/
+# Logs
+*.log
 
-# =========================================
-# Environment variables / secrets
-# =========================================
+# Environment / secrets
 .env
 .env.*
 *.pem
 *.key
 
-# =========================================
+# Local database / cache
+data/*.sqlite
+data/*.sqlite3
+data/*.db
+
+# Codex local runtime
+.codex/sessions/
+.codex/logs/
+
 # Temporary files
-# =========================================
 *.tmp
 *.bak
 *.swp

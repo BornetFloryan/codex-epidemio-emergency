@@ -1,20 +1,24 @@
-# Sources utilisées
+# Sources
 
-## Indicateurs avancés sanitaires
+Ce skill recherche des jeux de données via l’API data.gouv.fr.
 
-Ce skill vise les indicateurs utiles à la veille épidémiologique, notamment :
+## Requêtes utilisées
 
-- syndrome grippal ;
-- gastro-entérite ;
-- indicateurs publics de surveillance sanitaire.
+Pour la grippe :
 
-## Usage en situation d’urgence
+```text
+indicateur avancé sanitaire syndrome grippal
+```
 
-Ces indicateurs peuvent aider à repérer une dynamique de hausse ou une situation à surveiller.
+Pour la gastro-entérite :
+
+```text
+indicateur avancé sanitaire gastro-entérite
+```
 
 ## Limites
 
-- Un indicateur isolé ne suffit pas pour conclure.
-- Les données doivent être comparées dans le temps.
-- Les sources officielles doivent être privilégiées.
-- Le skill ne fournit aucun diagnostic médical individuel.
+- Les résultats dépendent de l’indexation de data.gouv.fr.
+- Les données doivent être vérifiées auprès du producteur.
+- Un indicateur seul ne suffit pas à conclure.
+- Le skill ne fournit pas de diagnostic médical.
