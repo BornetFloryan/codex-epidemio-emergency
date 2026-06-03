@@ -162,6 +162,8 @@ python -m pytest
 
 Les tests doivent rester independants d'internet. Les appels reseau doivent donc etre simules ou testes via des donnees locales.
 
+Le fichier `tests/test_skills_offline.py` couvre les traitements sans internet : analyse de tendance, note de crise, variantes de recherche, contexte geographique simule et contexte meteo simule.
+
 ## Cache
 
 Les appels API peuvent etre enregistres dans :

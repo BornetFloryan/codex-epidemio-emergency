@@ -2,51 +2,53 @@
 
 ## Nature du projet
 
-Ce dépôt contient une adaptation Codex du projet de skills demandé dans le cours.
+Ce depot contient une adaptation Codex du projet de skills demande dans le cours.
 
-Le thème choisi est la veille épidémiologique en situation d’urgence.
+Le theme choisi est la veille epidemiologique en situation d'urgence.
 
 ## Objectif
 
-Fournir un ensemble cohérent de skills permettant à Codex d’aider à la décision en situation tendue, notamment pour :
+Fournir un ensemble coherent de skills permettant a Codex d'aider a la decision en situation tendue, notamment pour :
 
-- rechercher des sources de données sanitaires ;
-- analyser des indicateurs épidémiologiques ;
+- rechercher des sources de donnees sanitaires ;
+- analyser des indicateurs epidemiologiques ;
 - qualifier une tendance ;
-- produire une courte note de situation.
+- produire une courte note de situation ;
+- contextualiser une zone geographique ;
+- contextualiser une situation meteorologique locale.
 
 ## Architecture
 
-- `.codex/skills/` contient les skills Codex conformément au support de cours.
+- `.codex/skills/` contient les skills Codex conformement au support de cours.
 - Chaque skill contient un `SKILL.md`.
 - Chaque skill peut appeler un script Python `main.py`.
 - Les scripts Python sont testables seuls en terminal.
-- Les fichiers `references/` contiennent les détails longs pour éviter de surcharger les `SKILL.md`.
-- `src/epidemio_common/` contient le code commun pour l’API et le cache SQLite.
-- `data/epidemio_cache.sqlite` est créé automatiquement pour stocker les résultats des appels API.
+- Les fichiers `references/` contiennent les details longs pour eviter de surcharger les `SKILL.md`.
+- `src/epidemio_common/` contient le code commun pour l'API et le cache SQLite.
+- `data/epidemio_cache.sqlite` est cree automatiquement pour stocker les resultats des appels API.
 - Le projet ne doit pas utiliser de serveur MCP.
 
-## Règles de développement
+## Regles de developpement
 
-- Ne pas créer d’application web.
-- Ne pas créer de serveur MCP.
-- Ne pas fournir de diagnostic médical individuel.
-- Toujours préciser les limites des données.
-- Toujours mentionner les sources utilisées.
+- Ne pas creer d'application web.
+- Ne pas creer de serveur MCP.
+- Ne pas fournir de diagnostic medical individuel.
+- Toujours preciser les limites des donnees.
+- Toujours mentionner les sources utilisees.
 - Les scripts doivent retourner du JSON propre.
-- Les erreurs réseau doivent être gérées sans stacktrace brute.
-- Les tests ne doivent pas dépendre d’internet.
+- Les erreurs reseau doivent etre gerees sans stacktrace brute.
+- Les tests ne doivent pas dependre d'internet.
 
 ## Commandes utiles
 
 ```bash
 python -m pytest
 
-python .codex/skills/health-dataset-search/main.py "grippe santé publique"
+python .codex/skills/health-dataset-search/main.py "grippe sante publique"
 python .codex/skills/ias-indicators/main.py --indicator grippe
 python .codex/skills/ias-indicators/main.py --indicator gastro
 python .codex/skills/trend-analysis/main.py --sample
 python .codex/skills/crisis-report/main.py "Hausse des syndromes grippaux en France"
-python .codex/skills/geo-zone-context/main.py "Besançon"
-python .codex/skills/weather-alert-context/main.py "Besançon"
+python .codex/skills/geo-zone-context/main.py "Besancon"
+python .codex/skills/weather-alert-context/main.py "Besancon"
 ```
