@@ -1,7 +1,7 @@
 ---
 name: weather-alert-context
 description: Trigger when user asks for weather context, meteorological situation, local weather, precipitation, wind, temperature, humidity, weather alert context, vigilance context, or emergency weather framing for a French place.
-allowed-tools: Bash(python *), Read
+allowed-tools: Bash(python .codex/skills/weather-alert-context/main.py *), Read
 ---
 
 # Weather Alert Context
@@ -29,6 +29,7 @@ Return JSON with:
 - limits;
 - sources.
 
+Always include the sources and limits in the final answer.
 This skill gives weather context only. It does not replace official vigilance bulletins.
 
 For source details, see `references/sources.md`.

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from __future__ import annotations
 
 import argparse
@@ -47,6 +46,7 @@ def build_response(indicator: str) -> dict:
         "query": query,
         "generated_at": utc_now_iso(),
         "source_api": api_result.get("source_api"),
+        "sources": ["data.gouv.fr"],
         "dataset_title": best_result.get("title"),
         "dataset_page": best_result.get("page"),
         "organization": best_result.get("organization"),

@@ -1,7 +1,7 @@
 ---
 name: trend-analysis
 description: Trigger when user asks to analyze a time series, epidemic trend, increasing or decreasing cases, compare last values, detect hausse, baisse, stabilite, tendance epidemique, incidence trend, or weekly health indicators.
-allowed-tools: Bash(python *), Read
+allowed-tools: Bash(python .codex/skills/trend-analysis/main.py *), Read
 ---
 
 # Trend Analysis
@@ -31,8 +31,10 @@ Return JSON with:
 - previous value;
 - delta;
 - interpretation;
+- sources;
 - limits.
 
+Always include the sources and limits in the final answer.
 Do not overinterpret the result.
 
 For method details, see `references/method.md`.

@@ -34,7 +34,6 @@ Le projet ne fournit pas de diagnostic medical individuel. Les resultats sont de
 |   `-- epidemio_common/
 |       |-- api_client.py
 |       `-- cache.py
-|-- tests/
 |-- AGENTS.md
 |-- README.md
 `-- requirements.txt
@@ -150,19 +149,57 @@ Installer les dependances :
 python -m pip install -r requirements.txt
 ```
 
-Les skills peuvent ensuite etre appeles directement avec les commandes indiquees plus haut.
+Les skills peuvent ensuite etre appeles directement avec les commandes indiquees plus haut ou etre sollicites naturellement dans une conversation Codex.
 
-## Tests
+## Verification manuelle
 
-La commande prevue pour lancer les tests est :
+Le projet se verifie par des commandes terminal simples, sans serveur et sans framework de test supplementaire :
 
 ```bash
-python -m pytest
+python .codex/skills/health-dataset-search/main.py "grippe sante publique"
+python .codex/skills/ias-indicators/main.py --indicator grippe
+python .codex/skills/ias-indicators/main.py --indicator gastro
+python .codex/skills/trend-analysis/main.py --sample
+python .codex/skills/trend-analysis/main.py --values 12 15 18 22
+python .codex/skills/crisis-report/main.py "Hausse des syndromes grippaux en France"
+python .codex/skills/geo-zone-context/main.py "Besancon"
+python .codex/skills/weather-alert-context/main.py "Besancon"
 ```
 
-Les tests doivent rester independants d'internet. Les appels reseau doivent donc etre simules ou testes via des donnees locales.
+Pour chaque sortie, verifier que le JSON contient au minimum un `status`, des `limits`, des `sources` ou une `source_api`, et aucune conclusion medicale individuelle.
 
-Le fichier `tests/test_skills_offline.py` couvre les traitements sans internet : analyse de tendance, note de crise, variantes de recherche, contexte geographique simule et contexte meteo simule.
+Exemples de demandes naturelles dans Codex :
+
+- "Trouve des sources de donnees publiques sur la grippe."
+- "Analyse cette serie epidemiologique : 12, 15, 18, 22."
+- "Fais une courte note de situation : hausse des syndromes grippaux en France."
+- "Donne le contexte geographique de Besancon."
+- "Donne le contexte meteo operationnel pour Besancon."
+
+## Conformite au support `ProjetsSkills.pdf`
+
+Le projet suit le cadrage du support :
+
+- pas de serveur MCP, pas de framework web et pas de port a exposer ;
+- un decoupage en six skills operationnels, chacun centre sur une capacite mobilisable en situation d'urgence ;
+- chaque skill contient un `SKILL.md` court, un script CLI Python `main.py` testable seul et, si necessaire, des details dans `references/` ;
+- les descriptions utilisent des formulations de declenchement et des mots-cles metier pour faciliter l'auto-routage ;
+- les `allowed-tools` sont restreints au script Python propre a chaque skill et a la lecture des fichiers utiles ;
+- les contenus longs, exemples, sources et methodes sont externalises hors des `SKILL.md` ;
+- les scripts sont verifies manuellement par commandes terminal et par demandes naturelles dans Codex.
+
+Estimation de l'empreinte tokens, calculee approximativement par `caracteres / 4` :
+
+| Skill | Idle, nom + description | Actif, `SKILL.md` |
+|---|---:|---:|
+| `crisis-report` | ~64 tokens | ~203 tokens |
+| `geo-zone-context` | ~60 tokens | ~212 tokens |
+| `health-dataset-search` | ~73 tokens | ~218 tokens |
+| `ias-indicators` | ~60 tokens | ~231 tokens |
+| `trend-analysis` | ~58 tokens | ~209 tokens |
+| `weather-alert-context` | ~60 tokens | ~228 tokens |
+
+Ces valeurs restent faibles car les scripts, references et donnees ne sont charges qu'a la demande.
 
 ## Cache
 

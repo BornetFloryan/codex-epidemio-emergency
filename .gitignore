@@ -9,11 +9,6 @@ venv/
 env/
 ENV/
 
-# Tests / coverage
-.pytest_cache/
-.coverage
-htmlcov/
-
 # Packaging
 build/
 dist/

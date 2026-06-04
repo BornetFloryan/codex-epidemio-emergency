@@ -30,6 +30,7 @@ def build_error_response(source_api: str, query: str, message: str) -> dict[str,
         "query": query,
         "generated_at": utc_now_iso(),
         "source_api": source_api,
+        "sources": [source_api],
         "message": message,
         "results": [],
         "limits": [
@@ -142,6 +143,7 @@ def search_datasets(query: str, page_size: int = 5, timeout: int = 10) -> dict[s
         "query": query,
         "generated_at": utc_now_iso(),
         "source_api": DATA_GOUV_BASE_URL,
+        "sources": ["data.gouv.fr"],
         "results": scored_results,
         "total": payload.get("total"),
         "limits": [
@@ -214,6 +216,7 @@ def search_communes(query: str, limit: int = 5, timeout: int = 10) -> dict[str, 
         "query": query,
         "generated_at": utc_now_iso(),
         "source_api": GEO_API_BASE_URL,
+        "sources": ["geo.api.gouv.fr"],
         "results": results,
         "limits": [
             "Les informations proviennent de geo.api.gouv.fr.",
@@ -247,6 +250,7 @@ def get_current_weather(latitude: float, longitude: float, timeout: int = 10) ->
         "query": f"{latitude},{longitude}",
         "generated_at": utc_now_iso(),
         "source_api": OPEN_METEO_BASE_URL,
+        "sources": ["Open-Meteo"],
         "current": payload.get("current") or {},
         "units": payload.get("current_units") or {},
         "limits": [

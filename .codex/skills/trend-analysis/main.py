@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import argparse
 import json
 from datetime import datetime
@@ -9,6 +8,11 @@ def analyze(values: list[float]) -> dict:
         return {
             "status": "error",
             "message": "Au moins deux valeurs sont nécessaires pour analyser une tendance.",
+            "sources": ["Série fournie par l'utilisateur ou exemple local."],
+            "limits": [
+                "Au moins deux valeurs sont nécessaires.",
+                "Ce résultat ne constitue pas une conclusion épidémiologique officielle.",
+            ],
         }
 
     previous_value = values[-2]
@@ -34,6 +38,7 @@ def analyze(values: list[float]) -> dict:
         "delta": delta,
         "trend": trend,
         "interpretation": interpretation,
+        "sources": ["Série fournie par l'utilisateur ou exemple local."],
         "limits": [
             "Cette analyse compare uniquement les deux dernières valeurs.",
             "Une tendance fiable nécessite plusieurs points, une période claire et une méthode statistique adaptée.",

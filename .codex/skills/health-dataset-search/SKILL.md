@@ -1,7 +1,7 @@
 ---
 name: health-dataset-search
 description: Trigger when user asks to find public health datasets, epidemiological data sources, data.gouv.fr resources, Sante publique France, Sentinelles, Geodes, open data, veille sanitaire, veille epidemiologique, grippe, gastro-enterite, or emergency health monitoring sources.
-allowed-tools: Bash(python *), Read
+allowed-tools: Bash(python .codex/skills/health-dataset-search/main.py *), Read
 ---
 
 # Health Dataset Search
@@ -24,8 +24,10 @@ Read the JSON output and summarize:
 - organizations;
 - relevance score;
 - available resources;
+- sources;
 - limits.
 
+Always include the sources and limits in the final answer.
 Do not provide individual medical diagnosis.
 
 For API details, see `references/api.md`.

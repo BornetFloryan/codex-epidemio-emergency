@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from __future__ import annotations
 
 import argparse
@@ -111,9 +110,6 @@ def build_response(query: str) -> dict:
 
         all_results = merge_results(all_results, results)
 
-        if len(all_results) >= 5:
-            break
-
     if not all_results and final_status != "partial_error":
         final_status = "ok_no_results"
         final_message = "Aucun jeu de données trouvé avec la requête et ses variantes."
@@ -125,6 +121,7 @@ def build_response(query: str) -> dict:
         "attempts": attempts,
         "generated_at": generated_at,
         "source_api": source_api,
+        "sources": ["data.gouv.fr"],
         "results_count": len(all_results),
         "results": all_results[:10],
         "message": final_message,

@@ -1,7 +1,7 @@
 ---
 name: ias-indicators
 description: Trigger when user asks about IAS, indicateur avance sanitaire, syndrome grippal, flu, gastroenteritis, gastro-enterite, epidemic indicators, incidence, veille epidemiologique, data.gouv.fr, or sanitary monitoring in France.
-allowed-tools: Bash(python *), Read
+allowed-tools: Bash(python .codex/skills/ias-indicators/main.py *), Read
 ---
 
 # IAS Indicators
@@ -34,8 +34,10 @@ Read the JSON output and summarize:
 - resources;
 - interpretation;
 - cache status;
+- sources;
 - limits.
 
+Always include the sources and limits in the final answer.
 Do not provide individual medical diagnosis.
 
 For source details, see `references/sources.md`.

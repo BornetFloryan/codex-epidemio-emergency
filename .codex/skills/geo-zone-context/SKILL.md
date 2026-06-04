@@ -1,7 +1,7 @@
 ---
 name: geo-zone-context
 description: Trigger when user asks for geographic context, commune lookup, zone context, city location, INSEE code, postal code, department, region, population, latitude, longitude, or emergency geographic framing for a French place.
-allowed-tools: Bash(python *), Read
+allowed-tools: Bash(python .codex/skills/geo-zone-context/main.py *), Read
 ---
 
 # Geo Zone Context
@@ -31,4 +31,5 @@ Return JSON with:
 - limits;
 - sources.
 
+Always include the sources and limits in the final answer.
 For source details, see `references/sources.md`.

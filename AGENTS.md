@@ -37,13 +37,10 @@ Fournir un ensemble coherent de skills permettant a Codex d'aider a la decision 
 - Toujours mentionner les sources utilisees.
 - Les scripts doivent retourner du JSON propre.
 - Les erreurs reseau doivent etre gerees sans stacktrace brute.
-- Les tests ne doivent pas dependre d'internet.
 
 ## Commandes utiles
 
 ```bash
-python -m pytest
-
 python .codex/skills/health-dataset-search/main.py "grippe sante publique"
 python .codex/skills/ias-indicators/main.py --indicator grippe
 python .codex/skills/ias-indicators/main.py --indicator gastro
