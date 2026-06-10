@@ -2,7 +2,8 @@
 
 Cette branche contient la variante **LangChain** du projet de veille epidemiologique en situation d'urgence.
 
-Elle conserve les six skills Codex du projet original et ajoute un agent LangChain capable de choisir et d'enchainer automatiquement ces capacites selon la demande de l'utilisateur.
+Elle conserve les six skills Codex du projet original et ajoute un workflow LangGraph
+deterministe qui orchestre cinq agents LangChain specialises.
 
 > La branche `main` contient volontairement la version sans LangChain. Cette branche `codex/langchain-agent` doit rester separee et ne pas etre fusionnee dans `main`.
 
@@ -16,7 +17,7 @@ Fournir un assistant de veille epidemiologique capable de :
 - contextualiser une commune et sa situation meteorologique ;
 - produire une courte note de situation ;
 - rechercher des informations dans la documentation locale ou un PDF ;
-- orchestrer automatiquement plusieurs outils avec un LLM.
+- orchestrer plusieurs agents specialises dans un graphe explicite et reproductible.
 
 Le projet ne fournit aucun diagnostic medical individuel. Les resultats doivent toujours etre verifies avec les sources officielles et accompagnes de leurs limites.
 
@@ -29,13 +30,14 @@ Le projet ne fournit aucun diagnostic medical individuel. Les resultats doivent 
 |-- src/
 |   |-- epidemio_common/            # Client API et cache SQLite
 |   `-- langchain_epidemio/
-|       |-- agent.py                # Agent create_agent, memoire et streaming
+|       |-- agent.py                # Variante historique a agent unique
 |       |-- backends.py             # Selection Mistral ou Ollama
 |       |-- cli.py                  # Interface en ligne de commande
 |       |-- models.py               # Schemas Pydantic
 |       |-- rag.py                  # RAG Markdown et PDF
 |       |-- structured.py           # Chaine de sortie structuree
-|       `-- tools.py                # Skills exposes comme outils LangChain
+|       |-- tools.py                # Skills exposes comme outils LangChain
+|       `-- workflow.py             # Graphe deterministe et cinq agents specialises
 |-- tests/
 |   `-- test_langchain_offline.py
 |-- .env.example
@@ -49,31 +51,30 @@ Le projet ne fournit aucun diagnostic medical individuel. Les resultats doivent 
 Question utilisateur
         |
         v
-Agent LangChain
+Planification deterministe par mots-cles
         |
         v
-Choix et enchainement des outils
-        |
-        +-- recherche de donnees sanitaires
-        +-- indicateurs IAS
-        +-- analyse de tendance
-        +-- contexte geographique
-        +-- contexte meteorologique
-        +-- note de crise
-        `-- recherche RAG dans la documentation
+surveillance -> tendance -> territoire -> documentation -> synthese
+      outils        outil         outils           outil          outil
         |
         v
-Reponse operationnelle avec sources et limites
+Reponse JSON avec trace, constats, sources et limites des outils
 ```
 
-L'agent utilise `create_agent` et dispose :
+Le workflow utilise un `StateGraph`. Le routeur n'est pas un LLM : des regles
+explicites choisissent les agents necessaires, qui sont ensuite executes dans un
+ordre fixe. La synthese est toujours la derniere etape.
 
-- d'un message systeme imposant les regles sanitaires du projet ;
-- d'une limite de recursion pour eviter les boucles ;
-- d'une memoire multi-tour basee sur un `thread_id` ;
-- d'un mode streaming pour afficher sa trajectoire ;
-- d'un RAG optionnel sur les fichiers Markdown ou PDF ;
-- d'une sortie structuree validee par Pydantic.
+| Agent LangChain | Outils autorises | Declenchement |
+|---|---|---|
+| `surveillance` | recherche de donnees, indicateurs IAS | sujet sanitaire, source ou indicateur |
+| `tendance` | analyse de tendance | serie numerique, hausse, baisse ou evolution |
+| `territoire` | contexte geographique et meteo | commune, zone ou meteo |
+| `documentation` | recherche RAG | demande documentaire avec RAG active |
+| `synthese` | note de crise | toujours, en derniere etape |
+
+Chaque agent dispose uniquement des outils utiles a son role. Le graphe conserve
+une `trace` des agents executes ainsi que leurs sorties d'outils.
 
 ## Skills exposes comme outils
 
@@ -142,11 +143,14 @@ Le meme backend d'embeddings doit etre utilise pour indexer et interroger le RAG
 
 ## Utilisation
 
-### Question simple avec choix automatique des outils
+### Executer le workflow deterministe
 
 ```bash
 python -m src.langchain_epidemio.cli "Analyse la tendance 12, 15, 18, 22"
 ```
+
+La sortie est un JSON contenant notamment le plan, la trace, les constats des
+agents et la reponse finale.
 
 ### Conversation avec memoire
 
@@ -154,7 +158,7 @@ python -m src.langchain_epidemio.cli "Analyse la tendance 12, 15, 18, 22"
 python -m src.langchain_epidemio.cli --interactive --thread-id cellule-1
 ```
 
-### Affichage de la trajectoire de l'agent
+### Affichage des etapes du graphe
 
 ```bash
 python -m src.langchain_epidemio.cli --stream "Donne le contexte meteo de Besancon"
@@ -205,10 +209,12 @@ python -m pytest tests/test_langchain_offline.py
 Ils verifient notamment :
 
 - l'utilisation des skills comme outils LangChain ;
+- la planification deterministe et l'ordre des agents ;
+- la construction du graphe multi-agents ;
 - la validation des sorties Pydantic ;
 - le decoupage et les metadonnees du RAG ;
 - le chargement d'un PDF ;
-- la construction du graphe de l'agent sans appel reseau.
+- la construction des graphes sans appel reseau.
 
 Un appel reel de l'agent necessite cependant une cle Mistral valide ou un serveur Ollama actif.
 
@@ -235,6 +241,7 @@ Limites obligatoires :
 ## Separation des branches
 
 - `main` : version originale basee uniquement sur les skills Codex ;
-- `codex/langchain-agent` : version etendue avec agent LangChain, memoire, streaming, sorties structurees et RAG.
+- `codex/langchain-agent` : version etendue avec workflow multi-agents LangChain,
+  memoire, streaming, sorties structurees et RAG.
 
 Cette separation permet de comparer clairement l'approche skills seule avec l'orchestration LangChain.

@@ -12,6 +12,7 @@ from src.langchain_epidemio.agent import build_agent
 from src.langchain_epidemio.models import SituationAssessment
 from src.langchain_epidemio.rag import load_documents, split_documents
 from src.langchain_epidemio.tools import analyser_tendance, produire_note_de_crise
+from src.langchain_epidemio.workflow import build_workflow, plan_workflow
 
 
 def test_existing_skills_are_callable_as_langchain_tools():
@@ -63,3 +64,28 @@ def test_agent_graph_builds_without_network(monkeypatch):
 
     assert "model" in graph.nodes
     assert "tools" in graph.nodes
+
+
+def test_workflow_planning_is_deterministic():
+    plan = plan_workflow(
+        "Analyse la hausse 12, 15, 18 de la grippe avec la meteo de Besancon"
+    )
+
+    assert plan == ["surveillance", "tendance", "territoire", "synthese"]
+
+
+def test_documentation_agent_is_only_selected_when_rag_is_enabled():
+    question = "Recherche les consignes dans la documentation du projet"
+
+    assert "documentation" not in plan_workflow(question, include_rag=False)
+    assert "documentation" in plan_workflow(question, include_rag=True)
+
+
+def test_multi_agent_workflow_graph_builds_without_network(monkeypatch):
+    monkeypatch.setenv("LLM_BACKEND", "ollama")
+
+    graph = build_workflow().get_graph()
+
+    assert {"planification", "surveillance", "tendance", "territoire", "synthese", "avancer"} <= set(
+        graph.nodes
+    )

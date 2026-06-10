@@ -1,15 +1,29 @@
-# Agent LangChain epidemiologique
+# Workflow LangGraph multi-agents
 
-Le dossier `src/langchain_epidemio/` ajoute une couche LangChain au-dessus des six skills existants.
+Le dossier `src/langchain_epidemio/` ajoute un workflow deterministe au-dessus
+des six skills existants.
 
 Fonctionnalites :
 
-- outils LangChain construits a partir des skills existants ;
-- agent `create_agent` avec consignes sanitaires et limite de recursion ;
+- cinq agents LangChain specialises : surveillance, tendance, territoire,
+  documentation et synthese ;
+- graphe `StateGraph` avec planification par regles et ordre d'execution fixe ;
+- outils LangChain construits a partir des skills existants et limites au role
+  de chaque agent ;
 - backends Mistral cloud et Ollama local ;
 - sorties structurees validees avec Pydantic ;
-- memoire multi-tour par `thread_id` et streaming ;
+- memoire par `thread_id`, trace du workflow et streaming des etapes ;
 - RAG sur la documentation locale et chargement de PDF avec `PyPDFLoader`.
+
+Le routage externe est deterministe : le LLM ne choisit ni le prochain agent ni
+l'ordre du workflow. Selon la demande, le graphe execute un sous-ensemble de :
+
+```text
+surveillance -> tendance -> territoire -> documentation -> synthese
+```
+
+La synthese est toujours executee en dernier. Les agents appellent les skills
+existants comme outils et leurs resultats restent presents dans le JSON final.
 
 Configurer les variables de `.env.example`, puis utiliser par exemple :
 
@@ -20,4 +34,5 @@ python -m src.langchain_epidemio.cli --rag-pdf AgentsLangchain.pdf "Qu'est-ce qu
 python -m src.langchain_epidemio.cli --structured "Hausse des syndromes grippaux en France"
 ```
 
-L'agent doit toujours mentionner les sources et limites des donnees et ne fournit aucun diagnostic medical individuel.
+Chaque agent doit mentionner les sources et limites des donnees et ne fournit
+aucun diagnostic medical individuel.

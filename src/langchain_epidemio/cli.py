@@ -7,8 +7,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .agent import build_agent, final_content, invoke_agent, stream_agent
 from .structured import assess_situation
+from .workflow import build_workflow, invoke_workflow, stream_workflow
 
 
 def _print_json(value: Any) -> None:
@@ -17,19 +17,19 @@ def _print_json(value: Any) -> None:
     print(json.dumps(value, ensure_ascii=False, indent=2))
 
 
-def _interactive(agent: Any, thread_id: str) -> None:
-    print("Agent epidemiologique pret. Entrez 'quit' pour terminer.")
+def _interactive(workflow: Any, thread_id: str) -> None:
+    print("Workflow epidemiologique pret. Entrez 'quit' pour terminer.")
     while True:
         question = input("\n> ").strip()
         if question.lower() in {"quit", "exit"}:
             return
         if question:
-            print(final_content(invoke_agent(agent, question, thread_id)))
+            _print_json(invoke_workflow(workflow, question, thread_id))
 
 
 def _main() -> None:
-    parser = argparse.ArgumentParser(description="Agent LangChain de veille epidemiologique.")
-    parser.add_argument("question", nargs="*", help="Question a transmettre a l'agent")
+    parser = argparse.ArgumentParser(description="Workflow LangGraph multi-agents de veille epidemiologique.")
+    parser.add_argument("question", nargs="*", help="Question a transmettre au workflow")
     parser.add_argument("--thread-id", default="default", help="Identifiant de conversation")
     parser.add_argument("--rag", action="store_true", help="Activer le RAG sur la documentation locale")
     parser.add_argument(
@@ -39,7 +39,7 @@ def _main() -> None:
         default=[],
         help="Indexer un PDF dans le RAG ; option repetable",
     )
-    parser.add_argument("--stream", action="store_true", help="Afficher la trajectoire de l'agent")
+    parser.add_argument("--stream", action="store_true", help="Afficher les etapes du graphe")
     parser.add_argument("--interactive", action="store_true", help="Demarrer une conversation multi-tour")
     parser.add_argument(
         "--structured",
@@ -55,24 +55,22 @@ def _main() -> None:
         _print_json(assess_situation(question))
         return
 
-    agent = build_agent(
+    workflow = build_workflow(
         include_rag=args.rag or bool(args.rag_pdf),
         rag_paths=args.rag_pdf or None,
     )
     if args.interactive:
-        _interactive(agent, args.thread_id)
+        _interactive(workflow, args.thread_id)
         return
     if not question:
         parser.error("Une question est necessaire hors mode --interactive.")
 
     if args.stream:
-        for state in stream_agent(agent, question, args.thread_id):
-            messages = state.get("messages") or []
-            if messages:
-                messages[-1].pretty_print()
+        for update in stream_workflow(workflow, question, args.thread_id):
+            _print_json(update)
         return
 
-    print(final_content(invoke_agent(agent, question, args.thread_id)))
+    _print_json(invoke_workflow(workflow, question, args.thread_id))
 
 
 def main() -> None:
