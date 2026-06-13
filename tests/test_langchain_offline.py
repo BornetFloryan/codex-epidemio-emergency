@@ -67,11 +67,21 @@ def test_agent_graph_builds_without_network(monkeypatch):
 
 
 def test_workflow_planning_is_deterministic():
-    plan = plan_workflow(
-        "Analyse la hausse 12, 15, 18 de la grippe avec la meteo de Besancon"
-    )
+    question = "Analyse la hausse 12, 15, 18 de la grippe avec la meteo de Besancon"
+    plans = [plan_workflow(question) for _ in range(5)]
 
-    assert plan == ["surveillance", "tendance", "territoire", "synthese"]
+    assert plans == [["surveillance", "tendance", "territoire", "synthese"]] * 5
+
+
+def test_workflow_plans_always_end_with_synthesis():
+    questions = [
+        "Analyse la tendance 12, 15, 18",
+        "Trouve des sources sur la grippe",
+        "Donne la meteo de Besancon",
+        "Question generale sans mot-cle",
+    ]
+
+    assert all(plan_workflow(question)[-1] == "synthese" for question in questions)
 
 
 def test_documentation_agent_is_only_selected_when_rag_is_enabled():

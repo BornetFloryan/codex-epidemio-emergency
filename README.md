@@ -3,9 +3,11 @@
 Cette branche contient la variante **LangChain** du projet de veille epidemiologique en situation d'urgence.
 
 Elle conserve les six skills Codex du projet original et ajoute un workflow LangGraph
-deterministe qui orchestre cinq agents LangChain specialises.
+dont le routage et l'ordre d'execution sont deterministes.
 
 > La branche `main` contient volontairement la version sans LangChain. Cette branche `codex/langchain-agent` doit rester separee et ne pas etre fusionnee dans `main`.
+
+La documentation detaillee de cette branche se trouve dans [`docs/`](docs/README.md).
 
 ## Objectif
 
@@ -27,6 +29,7 @@ Le projet ne fournit aucun diagnostic medical individuel. Les resultats doivent 
 .
 |-- .codex/
 |   `-- skills/                     # Six skills Codex utilisables seuls
+|-- docs/                           # Architecture, determinisme et verification
 |-- src/
 |   |-- epidemio_common/            # Client API et cache SQLite
 |   `-- langchain_epidemio/
@@ -64,6 +67,10 @@ Reponse JSON avec trace, constats, sources et limites des outils
 Le workflow utilise un `StateGraph`. Le routeur n'est pas un LLM : des regles
 explicites choisissent les agents necessaires, qui sont ensuite executes dans un
 ordre fixe. La synthese est toujours la derniere etape.
+
+Le routage est deterministe, mais les formulations des agents, le RAG et les
+donnees issues d'API vivantes ne sont pas reproductibles bit a bit. Cette
+distinction est detaillee dans [`docs/determinisme.md`](docs/determinisme.md).
 
 | Agent LangChain | Outils autorises | Declenchement |
 |---|---|---|

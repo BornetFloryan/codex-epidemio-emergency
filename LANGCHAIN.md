@@ -1,7 +1,7 @@
 # Workflow LangGraph multi-agents
 
-Le dossier `src/langchain_epidemio/` ajoute un workflow deterministe au-dessus
-des six skills existants.
+Le dossier `src/langchain_epidemio/` ajoute un workflow au-dessus des six skills
+existants, avec un routage externe deterministe.
 
 Fonctionnalites :
 
