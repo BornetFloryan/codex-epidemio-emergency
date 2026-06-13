@@ -1,15 +1,11 @@
-# Documentation - branche `codex/langchain-agent`
+# Documentation - projet Agents LangChain
 
-Cette branche correspond au projet agents adapte de `AgentsLangchain.pdf`.
+Cette branche `codex/langchain-agent` correspond au projet agents base sur
+`AgentsLangchain.pdf`.
 
-## Documents
+Pour installer, lancer et verifier rapidement le projet sous Linux ou Windows :
 
-- [`architecture.md`](architecture.md) : composants et circulation de l'etat ;
-- [`determinisme.md`](determinisme.md) : garanties et limites du workflow ;
-- [`conformite-agents-langchain.md`](conformite-agents-langchain.md) : elements du support couverts ;
-- [`verification.md`](verification.md) : commandes de validation et resultats attendus.
+## [Guide d'utilisation](UTILISATION.md)
 
-## Autre branche
-
-La branche `main` contient le projet initial de `ProjetsSkills.pdf`, sans
-LangChain ni LangGraph, et dispose de sa propre documentation dans `docs/`.
+La branche `main` contient le projet initial base uniquement sur les skills
+Codex.

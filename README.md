@@ -7,7 +7,15 @@ dont le routage et l'ordre d'execution sont deterministes.
 
 > La branche `main` contient volontairement la version sans LangChain. Cette branche `codex/langchain-agent` doit rester separee et ne pas etre fusionnee dans `main`.
 
-La documentation detaillee de cette branche se trouve dans [`docs/`](docs/README.md).
+Le guide pour installer et essayer cette branche sous Linux ou Windows se
+trouve dans [`docs/UTILISATION.md`](docs/UTILISATION.md).
+
+## Membres du groupe
+
+- [Floryan Bornet](https://github.com/BornetFloryan)
+- [Corentin Brendle](https://github.com/BrendleCorentin)
+- [Simon Bonnin](https://github.com/sbonnin3)
+- [Valentin Viret--Jacquot](https://github.com/ValentinV-J)
 
 ## Objectif
 
@@ -29,7 +37,7 @@ Le projet ne fournit aucun diagnostic medical individuel. Les resultats doivent 
 .
 |-- .codex/
 |   `-- skills/                     # Six skills Codex utilisables seuls
-|-- docs/                           # Architecture, determinisme et verification
+|-- docs/                           # Guide d'installation et de demonstration
 |-- src/
 |   |-- epidemio_common/            # Client API et cache SQLite
 |   `-- langchain_epidemio/
@@ -44,7 +52,6 @@ Le projet ne fournit aucun diagnostic medical individuel. Les resultats doivent 
 |-- tests/
 |   `-- test_langchain_offline.py
 |-- .env.example
-|-- LANGCHAIN.md
 `-- requirements.txt
 ```
 
@@ -69,8 +76,7 @@ explicites choisissent les agents necessaires, qui sont ensuite executes dans un
 ordre fixe. La synthese est toujours la derniere etape.
 
 Le routage est deterministe, mais les formulations des agents, le RAG et les
-donnees issues d'API vivantes ne sont pas reproductibles bit a bit. Cette
-distinction est detaillee dans [`docs/determinisme.md`](docs/determinisme.md).
+donnees issues d'API vivantes ne sont pas reproductibles bit a bit.
 
 | Agent LangChain | Outils autorises | Declenchement |
 |---|---|---|
