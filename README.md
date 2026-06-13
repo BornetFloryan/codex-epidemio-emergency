@@ -4,6 +4,23 @@ Ce depot contient une adaptation Codex d'un projet de skills pour l'aide a la de
 
 Le theme choisi est la veille epidemiologique : recherche de sources publiques, lecture d'indicateurs sanitaires, qualification rapide d'une tendance et production d'une courte note de situation.
 
+## Branches du depot
+
+Le depot contient deux projets volontairement separes :
+
+- `main` : projet initial adapte du support `ProjetsSkills.pdf`, base uniquement sur des skills Codex et des scripts Python ;
+- `codex/langchain-agent` : extension correspondant au support `AgentsLangchain.pdf`, avec un workflow multi-agents LangChain/LangGraph.
+
+Le guide pour installer et essayer cette branche sous Linux ou Windows se
+trouve dans [`docs/UTILISATION.md`](docs/UTILISATION.md).
+
+## Membres du groupe
+
+- [Floryan Bornet](https://github.com/BornetFloryan)
+- [Corentin Brendle](https://github.com/BrendleCorentin)
+- [Simon Bonnin](https://github.com/sbonnin3)
+- [Valentin Viret--Jacquot](https://github.com/ValentinV-J)
+
 ## Objectif
 
 Le projet fournit un ensemble coherent de skills que Codex peut activer selon la demande de l'utilisateur pour :
@@ -30,6 +47,7 @@ Le projet ne fournit pas de diagnostic medical individuel. Les resultats sont de
 |       `-- weather-alert-context/
 |-- data/
 |   `-- epidemio_cache.sqlite
+|-- docs/
 |-- src/
 |   `-- epidemio_common/
 |       |-- api_client.py
@@ -129,77 +147,11 @@ Sortie attendue : JSON contenant la commune retenue, les coordonnees utilisees, 
 
 Ce skill donne un contexte meteo, mais ne remplace pas une vigilance officielle Meteo-France.
 
-## Installation
+## Installation et verification
 
-Creer puis activer un environnement Python :
-
-```bash
-python -m venv .venv
-```
-
-Sous Windows PowerShell :
-
-```bash
-.\.venv\Scripts\Activate.ps1
-```
-
-Installer les dependances :
-
-```bash
-python -m pip install -r requirements.txt
-```
-
-Les skills peuvent ensuite etre appeles directement avec les commandes indiquees plus haut ou etre sollicites naturellement dans une conversation Codex.
-
-## Verification manuelle
-
-Le projet se verifie par des commandes terminal simples, sans serveur et sans framework de test supplementaire :
-
-```bash
-python .codex/skills/health-dataset-search/main.py "grippe sante publique"
-python .codex/skills/ias-indicators/main.py --indicator grippe
-python .codex/skills/ias-indicators/main.py --indicator gastro
-python .codex/skills/trend-analysis/main.py --sample
-python .codex/skills/trend-analysis/main.py --values 12 15 18 22
-python .codex/skills/crisis-report/main.py "Hausse des syndromes grippaux en France"
-python .codex/skills/geo-zone-context/main.py "Besancon"
-python .codex/skills/weather-alert-context/main.py "Besancon"
-```
-
-Pour chaque sortie, verifier que le JSON contient au minimum un `status`, des `limits`, des `sources` ou une `source_api`, et aucune conclusion medicale individuelle.
-
-Exemples de demandes naturelles dans Codex :
-
-- "Trouve des sources de donnees publiques sur la grippe."
-- "Analyse cette serie epidemiologique : 12, 15, 18, 22."
-- "Fais une courte note de situation : hausse des syndromes grippaux en France."
-- "Donne le contexte geographique de Besancon."
-- "Donne le contexte meteo operationnel pour Besancon."
-
-## Conformite au support `ProjetsSkills.pdf`
-
-Le projet suit le cadrage du support :
-
-- pas de serveur MCP, pas de framework web et pas de port a exposer ;
-- un decoupage en six skills operationnels, chacun centre sur une capacite mobilisable en situation d'urgence ;
-- chaque skill contient un `SKILL.md` court, un script CLI Python `main.py` testable seul et, si necessaire, des details dans `references/` ;
-- les descriptions utilisent des formulations de declenchement et des mots-cles metier pour faciliter l'auto-routage ;
-- les `allowed-tools` sont restreints au script Python propre a chaque skill et a la lecture des fichiers utiles ;
-- les contenus longs, exemples, sources et methodes sont externalises hors des `SKILL.md` ;
-- les scripts sont verifies manuellement par commandes terminal et par demandes naturelles dans Codex.
-
-Estimation de l'empreinte tokens, calculee approximativement par `caracteres / 4` :
-
-| Skill | Idle, nom + description | Actif, `SKILL.md` |
-|---|---:|---:|
-| `crisis-report` | ~64 tokens | ~203 tokens |
-| `geo-zone-context` | ~60 tokens | ~212 tokens |
-| `health-dataset-search` | ~73 tokens | ~218 tokens |
-| `ias-indicators` | ~60 tokens | ~231 tokens |
-| `trend-analysis` | ~58 tokens | ~209 tokens |
-| `weather-alert-context` | ~60 tokens | ~228 tokens |
-
-Ces valeurs restent faibles car les scripts, references et donnees ne sont charges qu'a la demande.
+Le guide [`docs/UTILISATION.md`](docs/UTILISATION.md) contient les commandes
+d'installation Linux et Windows, la demonstration terminal et les demandes a
+essayer naturellement dans Codex.
 
 ## Cache
 

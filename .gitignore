@@ -40,6 +40,9 @@ data/*.db
 .codex/sessions/
 .codex/logs/
 
+# Local Git worktrees
+.worktrees/
+
 # Temporary files
 *.tmp
 *.bak
